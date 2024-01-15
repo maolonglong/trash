@@ -1,0 +1,33 @@
+# Copyright 2024 Shaolong Chen. All rights reserved.
+# Use of this source code is governed by a MIT style
+# license that can be found in the LICENSE file.
+
+header:
+  license:
+    spdx-id: MIT
+    copyright-owner: Shaolong Chen <shaolong.chen@outlook.it>
+    content: |
+      Copyright 2024 Shaolong Chen. All rights reserved.
+      Use of this source code is governed by a MIT style
+      license that can be found in the LICENSE file.
+
+  paths-ignore:
+    - '**/*.md'
+    - '**/go.mod'
+    - '**/go.sum'
+    - 'LICENSE'
+    - '.envrc'
+    - 'flake.lock'
+    - 'flake.nix'
+
+  comment: on-failure
+
+  language:
+    Just:
+      filenames:
+        - "justfile"
+      comment_style_id: Hashtag
+
+dependency:
+  files:
+    - go.mod
