@@ -19,7 +19,7 @@ func TestRm(t *testing.T) {
 	defer os.Remove(file.Name())
 
 	// Call the rm function to remove the temporary file
-	err = rm(file.Name())
+	err = rm(file.Name(), make(map[string]struct{}))
 	if err != nil {
 		t.Fatalf("Failed to remove file: %v", err)
 	}

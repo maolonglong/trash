@@ -28,15 +28,27 @@ var (
 		false,
 		"ignore nonexistent files and arguments, never prompt",
 	)
+	protectedPaths = pflag.StringSliceP(
+		"protect",
+		"p",
+		nil,
+		"protected `paths`, separated by comma",
+	)
 	help = pflag.BoolP("help", "h", false, "display this help and exit")
 )
 
 var exitCode = 0
 
-func rm(name string) error {
+func rm(name string, m map[string]struct{}) error {
 	path, err := filepath.Abs(name)
 	if err != nil {
 		return err
+	}
+
+	_, protected := m[path]
+	if protected {
+		log.Printf("skipping %q", name)
+		return nil
 	}
 
 	stat, err := os.Stat(name)
@@ -101,8 +113,17 @@ func main() {
 		os.Exit(2)
 	}
 
+	m := make(map[string]struct{}, len(*protectedPaths)+1)
+	for _, path := range *protectedPaths {
+		m[path] = struct{}{}
+	}
+	home, _ := os.UserHomeDir()
+	if home != "" {
+		m[home] = struct{}{}
+	}
+
 	for _, name := range pflag.Args() {
-		if err := rm(name); err != nil {
+		if err := rm(name, m); err != nil {
 			log.Fatal(err)
 		}
 	}
