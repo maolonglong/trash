@@ -96,10 +96,18 @@ use one of these commands:
 `, os.Args[0])
 }
 
+func checkPrivileges() {
+	if os.Getuid() == 0 {
+		fmt.Fprintf(os.Stderr, "This program must not be run as root!!!\n")
+		os.Exit(1)
+	}
+}
+
 func main() {
+	checkPrivileges()
+
 	log.SetPrefix("trash: ")
 	log.SetFlags(0)
-	pflag.Usage = usage
 	pflag.Parse()
 
 	if *help {
